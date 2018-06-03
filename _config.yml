@@ -28,7 +28,7 @@ theme: minima
 plugins:
   - jekyll-feed
 
-default:
+defaults:
   -
     scope:
       path: ""
