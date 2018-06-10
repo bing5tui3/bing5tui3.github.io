@@ -1,0 +1,32 @@
+---
+layout: default
+permalink: /home
+---
+
+{% for post in site.posts %}
+  <section class="b5t3-page-title">
+    <div class="row">
+      <div class="col">
+        <h1>Posts</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="b5t3-page-content">
+    <div class="row">
+      <div class="col-md-8">
+        <section class="b5t3-post-item">
+
+          <div class="b5t3-post-title">
+            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+          </div>
+
+          <div class="b5t3-post-excerpt">
+            {{ post.excerpt }}
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </section>
+{% endfor %}

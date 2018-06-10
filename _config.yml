@@ -15,6 +15,7 @@
 # in the templates via {{ site.myvariable }}.
 title: bing5tui3 Keeps Learning
 email: rui.oaoa@gmail.com
+author: bing5tui3
 description: >- # this means to ignore newlines until "baseurl:"
   这家伙很懒，什么都没有留下
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -24,17 +25,14 @@ github_username:  bing5tui3
 
 # Build settings
 markdown: kramdown
-theme: minima
+highlighter: rouge
+# theme: minima
 plugins:
   - jekyll-feed
 
-defaults:
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
+sass:
+  sass_dir: css
+
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
