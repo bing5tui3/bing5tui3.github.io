@@ -33,7 +33,6 @@
 }
 
 .b5t3-blog-date {
-  border-bottom: 1px solid $b5t3-lncolor-1;
   p {
     padding-bottom: 0.2em;
     color: $b5t3-dtcolor-1;
@@ -65,5 +64,21 @@
 }
 
 .b5t3-post-excerpt {
-  padding-top: 1em;
+  padding-top: 1.5em;
+}
+
+.b5t3-post-title {
+  p {
+    padding-top: 10px;
+    margin-bottom: 0;
+    text-align: right;
+  }
+}
+
+.b5t3-under-line {
+  border-bottom: 1px solid $b5t3-lncolor-1;
+}
+
+.container {
+  max-width: 900px;
 }
