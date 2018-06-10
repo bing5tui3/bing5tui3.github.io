@@ -13,6 +13,11 @@
   .navbar-brand:focus {
     color: $white;
   }
+  p {
+    margin-bottom: 0;
+    color: $b5t3-fcolor-1;
+    font-size: 1.1rem;
+  }
 }
 
 .b5t3-section-1 {
@@ -27,7 +32,7 @@
 
 .b5t3-blog-title h2 {
   padding-top: 1em;
-  padding-bottom: 0.5em;
+  padding-bottom: 0;
   color: $primary;
   font-family: $b5t3-font-1;
 }
@@ -81,4 +86,50 @@
 
 .container {
   max-width: 900px;
+}
+
+.b5t3-sidebar {
+  padding: 0.8em;
+  border: 1px solid $b5t3-lncolor-1;
+  border-radius: 5px;
+  display: none;
+}
+
+@include media-breakpoint-up(md) {
+  .b5t3-sidebar {
+    display: block;
+  }
+}
+
+.b5t3-portrait {
+  padding-bottom: 1em;
+  border-bottom: 1px solid $b5t3-lncolor-1;
+}
+
+.b5t3-portrait-img {
+  height: 0;
+  width: 100%;
+  padding-bottom: 100%;
+  background-image: url("/assets/image/blog_image.jpg");
+  background-position: center center;
+  background-size: contain;
+  border-radius: 50%;
+}
+
+.b5t3-owner {
+  text-align: center;
+  padding-top: 1em;
+  color: $primary;
+  font-family: $b5t3-font-1;
+  p {
+    margin-bottom: 0.5em;
+  }
+}
+
+.b5t3-description {
+  font-size: 13px;
+  text-align: left;
+  p {
+    margin-bottom: 0;
+  }
 }

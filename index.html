@@ -2,38 +2,53 @@
 layout: default
 permalink: /
 ---
-
-{% for post in site.posts %}
+<div class="row">
   <section class="b5t3-page-title">
-    <div class="row">
       <div class="col">
-        <h1>Posts</h1>
+        <h1>POSTS</h1>
       </div>
-    </div>
   </section>
+</div>
+<div class="row">
+  <div class="col-md-9">
+    {% for post in site.posts %}
+      <section class="b5t3-page-content">
+        <div class="row">
+          <div class="col">
+            <section class="b5t3-post-item">
 
-  <section class="b5t3-page-content">
-    <div class="row">
-      <div class="col-md-9">
-        <section class="b5t3-post-item">
-
-          <div class="b5t3-post-title">
-            <div class="row">
-              <div class="col-md-8">
-                <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+              <div class="b5t3-post-title">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                  </div>
+                  <div class="col-md-4 b5t3-blog-date">
+                    <p>{{ post.date | date_to_string }}</p>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-4 b5t3-blog-date">
-                <p>{{ post.date | date_to_string }}</p>
+
+              <div class="b5t3-post-excerpt">
+                {{ post.excerpt }}
               </div>
-            </div>
+            </section>
           </div>
-
-          <div class="b5t3-post-excerpt">
-            {{ post.excerpt }}
-          </div>
-
-        </section>
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+  <div class="col-md-3">
+    <section class="b5t3-sidebar">
+      <div class="b5t3-portrait">
+        <div class="b5t3-portrait-img">
+        </div>
       </div>
-    </div>
-  </section>
-{% endfor %}
+      <div class="b5t3-owner">
+        <p>{{ site.author }}</p>
+      </div>
+      <div class="b5t3-description">
+        <p>{{ site.description }}</p>
+      </div>
+    </section>
+  </div>
+</div>
