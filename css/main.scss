@@ -34,21 +34,21 @@
   padding-top: 1em;
   padding-bottom: 0;
   color: $primary;
-  font-family: $b5t3-font-1;
+  // font-family: $b5t3-font-1;
 }
 
 .b5t3-blog-date {
   p {
     padding-bottom: 0.2em;
     color: $b5t3-dtcolor-1;
-    font-family: $b5t3-font-1;
+    // font-family: $b5t3-font-1;
     text-align: left;
   }
 }
 
 .b5t3-blog-content {
   margin-top: 3em;
-  font-family: $b5t3-font-1;
+  // font-family: $b5t3-font-1;
 }
 
 .b5t3-page-title {
@@ -124,7 +124,7 @@
   text-align: center;
   padding-top: 1em;
   color: $primary;
-  font-family: $b5t3-font-1;
+  // font-family: $b5t3-font-1;
   p {
     margin-bottom: 0.5em;
   }
@@ -149,11 +149,11 @@
 }
 
 .b5t3-copyright {
-  font-size: 12px;
-  color: $primary;
-  p {
-    margin: 0;
-    text-align: center;
+  font-size: 14px;
+  color: $b5t3-fcolor-2;
+  text-align: center;
+  em {
+    color: $primary;
   }
 }
 
