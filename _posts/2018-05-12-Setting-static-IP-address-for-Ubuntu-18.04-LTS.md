@@ -1,7 +1,7 @@
 ---
 title:  "Setting static IP address for Ubuntu 18.04 LTS"
 layout: post
-date:   2018-06-03
+date:   2018-05-12
 author: "bing5tui3"
 categories: linux notes
 excerpt_separator: <!--more-->

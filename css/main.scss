@@ -30,24 +30,29 @@
   border-radius: 5px;
 }
 
-.b5t3-blog-title h2 {
-  padding-top: 1em;
-  padding-bottom: 0;
-  color: $primary;
-  // font-family: $b5t3-font-1;
+.b5t3-blog-title {
+  h2 {
+    padding-top: 1em;
+    padding-bottom: 0;
+    color: $primary;
+    // font-family: $b5t3-font-1;
+  }
 }
 
 .b5t3-blog-date {
   p {
-    padding-bottom: 0.2em;
     color: $b5t3-dtcolor-1;
     // font-family: $b5t3-font-1;
     text-align: left;
+    margin-bottom: 5px;
+    padding-top: 0;
+    font-style: italic;
+    font-size: 0.8em;
   }
 }
 
 .b5t3-blog-content {
-  margin-top: 3em;
+  margin-top: 1.5em;
   // font-family: $b5t3-font-1;
 }
 
@@ -59,7 +64,7 @@
 .b5t3-post-item {
   border: 1px solid $b5t3-lncolor-1;
   border-radius: 5px;
-  padding: 1em 1em 0.5em 1em;
+  padding: 1em;
 }
 
 .b5t3-post-title {
@@ -70,17 +75,20 @@
 }
 
 .b5t3-post-excerpt {
-  padding-top: 1.5em;
+  padding-top: 0.5em;
+  font-size: 0.8rem;
   p {
     text-align: justify;
+    margin-bottom: 0;
   }
 }
 
 .b5t3-post-title {
+  padding-bottom: 0.5em;
   p {
-    padding-top: 10px;
+    padding-top: 0;
     margin-bottom: 0;
-    text-align: right;
+    text-align: left;
   }
 }
 
@@ -122,8 +130,10 @@
 
 .b5t3-owner {
   text-align: center;
-  padding-top: 1em;
+  padding-top: 0.8em;
   color: $primary;
+  font-family: 'Dokdo', cursive;
+  font-size: 1.2rem;
   // font-family: $b5t3-font-1;
   p {
     margin-bottom: 0.5em;
