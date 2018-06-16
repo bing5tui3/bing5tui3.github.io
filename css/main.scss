@@ -42,6 +42,7 @@
     padding-bottom: 0.2em;
     color: $b5t3-dtcolor-1;
     font-family: $b5t3-font-1;
+    text-align: left;
   }
 }
 
@@ -70,6 +71,9 @@
 
 .b5t3-post-excerpt {
   padding-top: 1.5em;
+  p {
+    text-align: justify;
+  }
 }
 
 .b5t3-post-title {
