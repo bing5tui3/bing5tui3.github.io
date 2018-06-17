@@ -132,7 +132,7 @@
   text-align: center;
   padding-top: 0.8em;
   color: $primary;
-  font-family: 'Dokdo', cursive;
+  font-family: 'Londrina Solid', cursive;
   font-size: 1.2rem;
   // font-family: $b5t3-font-1;
   p {
@@ -176,4 +176,8 @@
 
 code {
   font-family: $b5t3-font-2;
+}
+
+.fab {
+  font-size: 8px;
 }
