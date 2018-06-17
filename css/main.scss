@@ -137,6 +137,12 @@
   // font-family: $b5t3-font-1;
   p {
     margin-bottom: 0.5em;
+    a {
+      color: $b5t3-fcolor-2;
+    }
+    a:hover {
+      color: #e41b79;
+    }
   }
 }
 
