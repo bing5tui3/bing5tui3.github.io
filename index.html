@@ -24,8 +24,11 @@ permalink: /
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col b5t3-blog-date">
+                  <div class="col-md-8 b5t3-blog-date">
                     <p>{{ post.date | date_to_string }}</p>
+                  </div>
+                  <div class="col-md-4 b5t3-blog-cat">
+                    <span>{{ post.categories }}</span>
                   </div>
                 </div>
               </div>

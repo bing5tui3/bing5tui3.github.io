@@ -6,6 +6,7 @@
 
 .b5t3-navbar {
   background-color: $b5t3-bgcolor-1;
+  font-family: $b5t3-font-3;
   .navbar-brand {
     color: $b5t3-fcolor-1;
   }
@@ -35,17 +36,17 @@
     padding-top: 1em;
     padding-bottom: 0;
     color: $primary;
-    // font-family: $b5t3-font-1;
+    font-family: $b5t3-font-3;
   }
 }
 
 .b5t3-blog-date {
   p {
     color: $b5t3-dtcolor-1;
-    // font-family: $b5t3-font-1;
+    font-family: $b5t3-font-3;
     text-align: left;
-    margin-bottom: 5px;
-    padding-top: 0;
+    margin-bottom: 0;
+    padding-top: 5px;
     font-style: italic;
     font-size: 0.8em;
   }
@@ -59,6 +60,7 @@
 .b5t3-page-title {
   margin-bottom: 2em;
   color: $primary;
+  font-family: $b5t3-font-3;
 }
 
 .b5t3-post-item {
@@ -69,8 +71,15 @@
 
 .b5t3-post-title {
   border-bottom: 1px solid $b5t3-lncolor-1;
+  font-family: $b5t3-font-3;
+  padding-bottom: 0.1em;
   a {
     text-decoration: none;
+  }
+  p {
+    padding-top: 5px;
+    margin-bottom: 0;
+    text-align: left;
   }
 }
 
@@ -83,16 +92,8 @@
   }
 }
 
-.b5t3-post-title {
-  padding-bottom: 0.5em;
-  p {
-    padding-top: 0;
-    margin-bottom: 0;
-    text-align: left;
-  }
-}
-
 .b5t3-under-line {
+  padding-bottom: 0.3em;
   border-bottom: 1px solid $b5t3-lncolor-1;
 }
 
@@ -132,7 +133,7 @@
   text-align: center;
   padding-top: 0.8em;
   color: $primary;
-  font-family: 'Londrina Solid', cursive;
+  font-family: $b5t3-font-3;
   font-size: 1.2rem;
   // font-family: $b5t3-font-1;
   p {
@@ -178,6 +179,7 @@
   em {
     color: $primary;
   }
+  font-family: $b5t3-font-3;
 }
 
 code {
@@ -186,4 +188,24 @@ code {
 
 .fab {
   font-size: 8px;
+}
+
+.b5t3-blog-cat {
+  text-align: right;
+  color: $white;
+  font-family: $b5t3-font-3;
+  span {
+    font-size: 0.8em;
+    background-color: $b5t3-bgcolor-2;
+    border-radius: 0.2em;
+    padding: 0.1em 0.3em;
+  }
+  span:hover {
+    background-color: #7079a9;
+    cursor: default;
+  }
+}
+
+.btn {
+  font-family: $b5t3-font-3;
 }
