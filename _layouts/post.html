@@ -7,58 +7,62 @@
 
     {% include navbar.html %}
 
-    <section class="b5t3-section-1">
-      <div class="container">
+    <div class="b5t3-body">
 
-        <div class="row">
-          <div class="col">
-            <div class="b5t3-blog-title">
-              <h2>{{ page.title }}</h2>
+      <section class="b5t3-section-1">
+        <div class="container">
+
+          <div class="row">
+            <div class="col">
+              <div class="b5t3-blog-title">
+                <h2>{{ page.title }}</h2>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <div class="b5t3-under-line">
-              <div class="row">
-                <div class="col-md-8">
-                  <div class="b5t3-blog-date">
-                    <p>{{ page.date | date_to_string }}</p>
+          <div class="row">
+            <div class="col">
+              <div class="b5t3-under-line">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="b5t3-blog-date">
+                      <p>{{ page.date | date_to_string }}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="b5t3-blog-cat">
-                    <span>{{ page.categories }}</span>
+                  <div class="col-md-4">
+                    <div class="b5t3-blog-cat">
+                      <span>{{ page.categories }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <div class="b5t3-blog-content">
-              {{ content }}
+          <div class="row">
+            <div class="col">
+              <div class="b5t3-blog-content">
+                {{ content }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="b5t3-section-2">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-primary btn-sm" onclick="history.go(-1)">BACK</button>
             </div>
           </div>
         </div>
+      </section>
 
-      </div>
-    </section>
+    </div>
 
     {% include footer.html %}
-
-    <section class="b5t3-section-2">
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <button type="button" class="btn btn-primary btn-sm" onclick="history.go(-1)">BACK</button>
-          </div>
-        </div>
-      </div>
-    </section>
 
   </body>
 

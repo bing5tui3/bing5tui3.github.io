@@ -4,6 +4,14 @@
 @import 'bootstrap/bootstrap';
 @import 'custom/markdown';
 
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
 .b5t3-navbar {
   background-color: $b5t3-bgcolor-1;
   font-family: $b5t3-font-3;
@@ -24,6 +32,10 @@
 .b5t3-section-1 {
   padding-top: 3em;
   padding-bottom: 2em;
+}
+
+.b5t3-body {
+  min-height: 100vh;
 }
 
 .highlight {
@@ -55,6 +67,14 @@
 .b5t3-blog-content {
   margin-top: 1.5em;
   // font-family: $b5t3-font-1;
+
+  h1,h2,h3,h4,h5,h6 {
+    color: $primary;
+    font-family: $b5t3-font-3;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
 }
 
 .b5t3-page-content {
@@ -160,8 +180,10 @@
 }
 
 .b5t3-footer {
-    position: absolute;
+    position: relative;
     bottom: -60px;
+/*    position: relative;
+    clear: both;*/
     width: 100%;
     height: 60px;
     line-height: 60px;
@@ -212,4 +234,8 @@ code {
 
 .btn {
   font-family: $b5t3-font-3;
+}
+
+.highlight {
+  margin-bottom: 0.5em;
 }
