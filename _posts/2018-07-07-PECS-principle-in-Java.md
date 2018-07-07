@@ -1,5 +1,5 @@
 ---
-title:  "Setting static IP address for Ubuntu 18.04 LTS"
+title:  "PECS principle in Java"
 layout: post
 date:   2018-07-07
 author: "bing5tui3"
