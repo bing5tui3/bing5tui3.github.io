@@ -125,15 +125,18 @@ body {
   max-width: 900px;
 }
 
-.b5t3-sidebar {
+.b5t3-sidebar,
+.b5t3-blog-tags {
   padding: 0.8em;
   border: 1px solid $b5t3-lncolor-1;
   border-radius: 5px;
   display: none;
+  margin-bottom: 1em;
 }
 
 @include media-breakpoint-up(md) {
-  .b5t3-sidebar {
+  .b5t3-sidebar,
+  .b5t3-blog-tags {
     display: block;
   }
 }
@@ -218,6 +221,21 @@ code {
 
 .b5t3-blog-cat {
   text-align: right;
+  color: $white;
+  font-family: $b5t3-font-3;
+  span {
+    font-size: 0.8em;
+    background-color: $b5t3-bgcolor-2;
+    border-radius: 0.2em;
+    padding: 0.1em 0.3em;
+  }
+  span:hover {
+    background-color: #7079a9;
+    cursor: default;
+  }
+}
+
+.b5t3-blog-tags {
   color: $white;
   font-family: $b5t3-font-3;
   span {

@@ -3,7 +3,7 @@ title:  "PECS principle in Java"
 layout: post
 date:   2018-07-07
 author: "bing5tui3"
-categories: java
+tags: [java]
 excerpt_separator: <!--more-->
 ---
 
