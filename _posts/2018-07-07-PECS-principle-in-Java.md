@@ -9,6 +9,7 @@ excerpt_separator: <!--more-->
 
 工作上碰到一个需要异步处理任务的功能，所以想基于队列来实现，由守护线程来从队列中消费消息。 
 由于队列容器内的对象需要有一些公共机制，以使异步处理模块能够不关心具体的实现，这就需要使用到泛型队列了。
+
 本文记录一下泛型队列的PECS原则的实践。
 
 <!--more-->
@@ -87,7 +88,7 @@ public class ATaskModel extends BaseTaskModel {
 
     public MessageA getMessageA() { return this.messageA; }
 
-    public void setMessageA(MessageA messageA) { this.messageA = messageA};
+    public void setMessageA(MessageA messageA) { this.messageA = messageA; }
 
 }
 ~~~
@@ -135,7 +136,7 @@ public interface TaskHandler {
 public class ATaskHandler implements TaskHandler {
 
     public void handleTask(BaseTaskModel taskModel) { 
-        // 强制转换成A的任务实例
+        // 强制转换成A的任务实例，如果taskModel不是ATaskModel的实例，则会抛出CCE
         ATaskModel a = (ATaskModel) taskModel;
         // do something 
     }
@@ -152,7 +153,7 @@ public class ATaskHandler implements TaskHandler {
 public class BTaskHandler implements TaskHandler {
 
     public void handleTask(BaseTaskModel taskModel) { 
-        // 强制转换成B的任务实例
+        // 强制转换成B的任务实例，同理会抛出CCE
         BTaskModel b = (BTaskModel) taskModel;
         // do something 
     }
@@ -171,20 +172,20 @@ public class AsynchronousTaskProcesser {
     // 任务列表  任务名 -> 任务处理器
     private Map<String, TaskHandler> taskNameMap = new HashMap<>();
     // 任务队列  任务名 -> 队列
-    private Map<String, LinkedBlockingQueue<BaseTaskModel taskModel>> taskQueueMap = new HashMap<>();
+    private Map<String, LinkedBlockingQueue<BaseTaskModel>> taskQueueMap = new HashMap<>();
 
     private ExecutorService executorService;
 
-    private TaskHandler ATaskHandler = new ATaskHandler();
+    private TaskHandler aTaskHandler = new ATaskHandler();
 
-    private TaskHandler BTaskHandler = new BTaskHandler();
+    private TaskHandler bTaskHandler = new BTaskHandler();
 
     // 提供一个公有的初始化方法
     public void init() {
 
         // 初始化任务列表
-        taskNameMap.put("taskA", ATaskHandler);
-        taskNameMap.put("taskB", BTaskHandler);
+        taskNameMap.put("taskA", aTaskHandler);
+        taskNameMap.put("taskB", bTaskHandler);
         // 初始化任务队列
         taskQueueMap.put("taskA", new LinkedBlockingQueue<>());
         taskQueueMap.put("taskB", new LinkedBlockingQueue<>());
@@ -192,35 +193,35 @@ public class AsynchronousTaskProcesser {
         // 根据队列数量设置线程池线程
         executorService = Executors.newFixedThreadPool(taskQueueMap.size());
 
-        for (Map.Entry<String, LinkedBlockingQUeue<BaseTaskModel> entry : taskQueueMap.entrySet()) {
+        for (Map.Entry<String, LinkedBlockingQueue<BaseTaskModel>> entry : taskQueueMap.entrySet()) {
             executorService.submit(
-                () -> {
-                    String taskName = entry.getKey();
+                    () -> {
+                        String taskName = entry.getKey();
 
-                    TaskHandler handler = taskMap.get(taskName);
+                        TaskHandler handler = taskNameMap.get(taskName);
 
-                    LinkedBlockingQueue<BaseTaskModel> queue = entry.getValue();
+                        LinkedBlockingQueue<BaseTaskModel> queue = entry.getValue();
 
-                    while (true) {
-                        BaseTaskModel taskModel = null;
-                        try {
+                        while (true) {
+                            BaseTaskModel taskModel = null;
+                            try {
 
-                            taskModel = queue.take();
-                            // 取出任务实例后交给任务处理器处理任务
-                            handler.handleTask(taskModel);
+                                taskModel = queue.take();
+                                // 取出任务实例后交给任务处理器处理任务
+                                handler.handleTask(taskModel);
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
 
-                            // 错误发生后交给任务处理器处理错误
-                            if (taskModel != null) {
-                                handler.handleException(taskModel);
+                                // 错误发生后交给任务处理器处理错误
+                                if (taskModel != null) {
+                                    handler.handleException(taskModel);
+                                }
                             }
                         }
                     }
-                }
             );
         }
 
@@ -240,10 +241,37 @@ public class AsynchronousTaskProcesser {
 }
 ~~~
 
-#### <? extends BaseClass>
+这个类为每个任务分配一个队列，队列管理统一由 `taskQueueMap` 管理，而队列则是统一的基于 `BaseTaskModel` 实现： `LinkedBlockingQueue<BaseTaskModel taskModel>` 。 虽然这种情况下队列中能够装入 `BaseTaskModel` 的任何子类，如 `ATaskModel` 、 `BTaskModel` 等等， 但是非常可能出现在 `ATaskModel` 中填入了任务名 `taskB`，导致 `ATaskModel` 的实例不小心入队到了任务B的队列中。
+
+为了避免这种情况，我们希望能够在队列初始化的时候明确指定每个队列能够装载的具体的 `TaskModel`，如：
+~~~ java
+public void init() {
+    ...
+
+    // 初始化任务队列
+    taskQueueMap.put("taskA", new LinkedBlockingQueue<ATaskModel>());  // error
+    taskQueueMap.put("taskB", new LinkedBlockingQueue<BTaskModel>());  // error
+    
+    ...
+}
+~~~
+但是这样会产生错误，为什么呢？ 因为我们的 `taskQueueMap` 中定义的 `value` 类型是 `LinkedBlockingQueue<BaseTaskModel>`。 而Java编译器认为 `LinkedBlockingQueue<ATaskModel>` 并不是 `LinkedBlockingQueue<BaseTaskModel>` 的子类。
+
+这里比较绕的一点就是：
+
+`ATaskModel` --- subclass ---> `BaseTaskModel`   
+`LinkedBlockingQueue<ATaskModel>` --- not a subclass ---> `LinkedBlockingQueue<BaseTaskModel>`
+
+那么我们要实现具体队列由具体类型所初始化该怎么办？
+
+Java设计者给了我们一个解决方案： 
+* `? extends` *BaseClass*  
+* `? super` *BaseClass*
+
+#### 关键字<? extends *BaseClass*>
 
 
-#### ? super BaseClass
+#### 关键字<? super *BaseClass*>
 
 
 #### 实现一个泛型的队列
