@@ -238,16 +238,6 @@ code {
 .b5t3-blog-tags {
   color: $white;
   font-family: $b5t3-font-3;
-  span {
-    font-size: 0.8em;
-    background-color: $b5t3-bgcolor-2;
-    border-radius: 0.2em;
-    padding: 0.1em 0.3em;
-  }
-  span:hover {
-    background-color: #7079a9;
-    cursor: default;
-  }
 }
 
 .btn {
@@ -256,4 +246,36 @@ code {
 
 .highlight {
   margin-bottom: 0.5em;
+}
+
+.b5t3-tag-cloud ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  
+  li {
+    display: inline-block;
+    margin: 0 .3em .3em 0;
+    padding: 0;
+    a {
+      display: inline-block;
+      max-width: 100px;
+      height: 28px;
+      line-height: 28px;
+      padding: 0 1em;
+      background-color: $b5t3-bgcolor-2;
+      border-radius: 3px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      color: $white;
+      font-size: 13px;
+      text-decoration: none;
+      -webkit-transition: .2s;
+      transition: .2s;
+    }
+    a:hover {
+      background-color: #7079a9;
+    }
+  }
 }

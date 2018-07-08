@@ -4,6 +4,7 @@ layout: post
 date:   2018-07-07
 author: "bing5tui3"
 tags: [java]
+categories: [java]
 excerpt_separator: <!--more-->
 ---
 
