@@ -265,13 +265,144 @@ public void init() {
 那么我们要实现具体队列由具体类型所初始化该怎么办？
 
 Java设计者给了我们一个解决方案： 
-* `? extends` *BaseClass*  
-* `? super` *BaseClass*
+* 通配符类型 `? extends` *BaseClass*  
+* 通配符类型 `? super` *BaseClass*
 
 #### 关键字<? extends *BaseClass*>
 
+`? extends` *BaseClass* 规定了类型参数的上界。 
+
+假设有个人类的类 `class Human`，有个男人的类 `class Man extends Human`，有个女人的类 `class Woman extends Human`
+~~~ java
+public class Human {}
+
+class Man extends Human {} 
+
+class Woman extends Human {}
+~~~
+
+虽然我们有: 
+
+* `Man` --- subclass ---> `Human`
+* `Woman` --- subclass ---> `Human`
+
+并且 `List<Human>` 可以管理 `Human`、 `Man`、 `Woman`的集合，<br>
+但是`List<List<Human>` 却不能管理 `List<Human>`、 `List<Man>`、 `List<Woman>` 的集合。 <br>
+这是因为 `List<Man>` --- not a subclass ---> `List<Human>`。
+
+`? extends Human` 规定了一个泛型类的类型参数可以是 `Human`、 `Man`、 `Woman`，即规定了类型参数的上界。在这种情况下：
+
+* `List<Human>` --- subclass ---> `List<? extends Human>`
+* `List<Man>` --- subclass ---> `List<? extends Human>`
+* `List<Woman>` --- sublcass ---> `List<? extends Human>`
+
+所以我们就可以用一个 `List<List<? extends Human>` 来管理 `List<Human>`、 `List<Man>`、 `List<Woman>` 的集合了。
+
+但是这种情况下，会使 `setter` 失效：
+~~~ java
+
+Man man = new Man();
+
+List<? extends Human> list = new ArrayList<Man>();
+
+list.add(man);   // error
+
+~~~
+因为 `? extends Human` 是 `Human` 或者 `Human` 的子类的基类，但是因为是通配，所以 `? extends Human` 并不是真实存在的类，这种情况下编译器无法自动进行向上转型，所以所有接受参数 `? extends Human` 的方法都会失效。
 
 #### 关键字<? super *BaseClass*>
 
+`? super` *BaseClass* 规定了类型参数下界。
+
+`? super Human` 表示泛型类的类型可以是 `Human`，也可以是 `Human` 的基类（如这里就是 `Object` ）， 所以这里的下界是 `Human` 类。
+
+但是如果调用 `setter` 方法，只能传递 `Human` 以及 `Human` 的子类，而不能传 `Object`。 原因是 `? super Human` 表示的是某个类，这个类可以是 `Human` 类，也可以是 `Human` 类的基类，但是至少是 `Human` 类。 所以在接受 `? super Human` 参数的方法中，只能传递 `Human` 以及其子类，因为 `? super Human` 定义了下界是 `Human`，所以编译器可以将参数向上转型至下界 `Human`。
+
+但这样的泛型类会使 `getter` 部分失效，其取出来的实例由于被标注了 `? super Human` ，所以编译器只能将其转换成 `Object`。
+
 
 #### 实现一个泛型的队列
+
+基于上述考量，我们可以实现一个如下类型较为安全的异步线程类：
+
+~~~ java
+public class AsynchronousTaskProcesser {
+
+    // 任务列表  任务名 -> 任务处理器
+    private Map<String, TaskHandler> taskNameMap = new HashMap<>();
+    // 任务队列  任务名 -> 队列
+    private Map<String, LinkedBlockingQueue<? extends BaseTaskModel>> taskQueueMap = new HashMap<>();
+
+    private ExecutorService executorService;
+
+    private TaskHandler aTaskHandler = new ATaskHandler();
+
+    private TaskHandler bTaskHandler = new BTaskHandler();
+
+    // 提供一个公有的初始化方法
+    public void init() {
+
+        // 初始化任务列表
+        taskNameMap.put("taskA", aTaskHandler);
+        taskNameMap.put("taskB", bTaskHandler);
+        // 初始化任务队列
+        taskQueueMap.put("taskA", new LinkedBlockingQueue<ATaskModel>());
+        taskQueueMap.put("taskB", new LinkedBlockingQueue<BTaskModel>());
+
+        // 根据队列数量设置线程池线程
+        executorService = Executors.newFixedThreadPool(taskQueueMap.size());
+
+        for (Map.Entry<String, LinkedBlockingQueue<? extends BaseTaskModel>> entry : taskQueueMap.entrySet()) {
+            executorService.submit(
+                    () -> {
+                        String taskName = entry.getKey();
+
+                        TaskHandler handler = taskNameMap.get(taskName);
+
+                        LinkedBlockingQueue<? extends BaseTaskModel> queue = entry.getValue();
+
+                        while (true) {
+                            BaseTaskModel taskModel = null;
+                            try {
+
+                                taskModel = queue.take();
+                                // 取出任务实例后交给任务处理器处理任务
+                                handler.handleTask(taskModel);
+
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                                // 错误发生后交给任务处理器处理错误
+                                if (taskModel != null) {
+                                    handler.handleException(taskModel);
+                                }
+                            }
+                        }
+                    }
+            );
+        }
+
+    }
+
+    // 提供一个添加任务消息的公有方法
+    public boolean add(BaseTaskModel taskModel) {
+        if (taskModel != null) {
+            switch (taskModel.getTaskName()) {
+                case "taskA":
+                
+                    LinkedBlockingQueue<ATaskModel> queue = (LinkedBlockingQueue<ATaskModel>) taskQueueMap.get(taskModel.getTaskName());
+                    return queue.offer((ATaskModel) taskModel);
+
+                case "taskB":
+
+                    LinkedBlockingQueue<BTaskModel> queue = (LinkedBlockingQueue<BTaskModel>) taskQueueMap.get(taskModel.getTaskName());
+                    return queue.offer((BTaskModel) taskModel);
+            }
+        }
+        return false;
+    }
+
+}
+~~~
