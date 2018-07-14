@@ -1,0 +1,15 @@
+<section class="b5t3-blog-tags">
+  <section class="b5t3-tag-cloud">
+    <!-- 获得所有blog的tags -->
+    {% include collecttags.html %}
+
+    <ul>
+      {% for tag in tags %}
+        {% if tag != "" %}
+          <li><a href="/tag/{{ tag }}">{{ tag }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+  </section>
+</section>

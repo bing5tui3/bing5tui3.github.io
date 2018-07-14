@@ -1,7 +1,7 @@
 ---
 layout: default
-permalink: /
 ---
+
 <div class="row">
   <section class="b5t3-page-title">
       <div class="col">
@@ -11,7 +11,7 @@ permalink: /
 </div>
 <div class="row">
   <div class="col-md-9">
-    {% for post in site.posts %}
+    {% for post in site.tags[page.tag] %}
       <section class="b5t3-page-content">
         <div class="row">
           <div class="col">
@@ -51,4 +51,3 @@ permalink: /
     {% include tag.html %}
     
   </div>
-</div>

@@ -105,6 +105,11 @@ body {
     margin-bottom: 0;
     text-align: left;
   }
+  span {
+    a {
+      color: $white;
+    }
+  }
 }
 
 .b5t3-post-excerpt {
