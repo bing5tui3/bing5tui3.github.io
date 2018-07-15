@@ -7,7 +7,7 @@ tags: [linux]
 categories: [linux]
 excerpt_separator: <!--more-->
 ---
-&nbsp 虚拟机安装了18.04新版本的Ubuntu，但是让Cisco路由器分配静态IP的时候，无论使用 `hardware-address` 还是 `client-identifier` 都无法实现DHCP分配静态IP的问题，所以只能让系统自行设置静态IP。本文记录一下18.04下如何在系统内设置静态IP。
+虚拟机安装了18.04新版本的Ubuntu，但是让Cisco路由器分配静态IP的时候，无论使用 `hardware-address` 还是 `client-identifier` 都无法实现DHCP分配静态IP的问题，所以只能让系统自行设置静态IP。本文记录一下18.04下如何在系统内设置静态IP。
 <!--more-->
 
 18.04的静态IP目前我没找到如果通过dhcp的方式由dhcp服务器下发，只能通过机器自行设置：
