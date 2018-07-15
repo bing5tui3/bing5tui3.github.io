@@ -31,7 +31,9 @@
                   </div>
                   <div class="col-md-4">
                     <div class="b5t3-blog-cat">
-                      <span>{{ page.tags }}</span>
+                      {% for tag in page.tags %}
+                        <span><a href="/tag/{{ tag }}">{{ tag }}</a></span>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>

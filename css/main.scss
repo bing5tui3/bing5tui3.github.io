@@ -233,6 +233,12 @@ code {
     background-color: $b5t3-bgcolor-2;
     border-radius: 0.2em;
     padding: 0.1em 0.3em;
+    a {
+      color: $white;
+    }
+    a:hover {
+      text-decoration: none;
+    }
   }
   span:hover {
     background-color: #7079a9;
