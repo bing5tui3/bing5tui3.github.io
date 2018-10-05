@@ -316,7 +316,7 @@ class Main {
 
 但是这样的写法有个问题，`sayHello`只能是一个固定实现，任何调用`sayHello`的实例，都将输出类似"hello,blabla...!"的玩意儿，我们只能控制这个"blabla"是什么，而不能控制方法的内部执行逻辑。
 
-而现在函数式编程中想要做的事情是什么呢，其实就是通过接受参数动态控制方法体内逻辑的执行，类似于下面的伪代码：
+而现在函数式编程中想要做的事情是什么呢，其实就是通过接受参数动态控制方法体内逻辑的执行，可以说是向方法中传递行为，类似于下面的伪代码：
 
 ~~~ java
 public void sayHello(___) {
@@ -389,3 +389,276 @@ public static void main(String[] args) {
 ~~~
 
 其结果就是我们通过自己实现了一个`Hello`接口的`HelloWorld`类，并将其实例传入`helloService`中，控制了`helloService`里的`sayHello`方法。
+
+如此，我们可以说勉强实现了向一个方法中传递行为。但实际上又并不是真的传递了行为，而是传递了一个包含行为的实例。
+
+但是我们又希望能够真正的传递行为，像下面的伪代码这样：
+
+~~~ java
+public void sayHello(someAction) {
+    someAction();
+}
+~~~
+
+lambda表达式就做了这么一件事，将一段表达式通过内联的方式赋值在一个变量上。
+
+我们希望不用再写一个类，而将一段代码绑定在一个变量上（Function as value），就像下面这样（先不管Function是个什么东西）：
+
+~~~ 
+Function someAction = public void sayHello() {
+    System.out.println("Hello World!");
+}
+~~~
+
+Java中可以做到吗？ lambda表达式就做了这么一件事，将一段表达式通过内联的方式赋值在一个变量上。
+
+那么这段代码中有哪些东西是没用的呢？
+
+
+**首先，public肯定是没用的了，因为这样绑定后，这段代码就是一个局部变量了，和类中的概念就没关系了。我们把`public`去掉：**
+
+~~~ 
+Function someAction = void sayHello() {
+    System.out.println("Hello World!");
+}
+~~~
+
+**接下来，方法的名称`sayHello`还有用吗？肯定也没用了，因为这段代码的名称就由这个变量`someAction`来标明了，去掉`sayHello`：**
+
+~~~
+Function someAction = void () {
+    System.out.println("Hello World!");
+}
+~~~
+
+**我们再看这个返回类型`void`是否还有必要？ Java编译器已经足够聪明，根据代码来判断返回类型是什么，所以这里返回类型也不需要了，去掉：**
+
+~~~
+Function someAction = () {
+    System.out.println("Hello World!");
+}
+~~~
+
+**至此我们的lambda表达式进化的就差不多了，只不过还剩下一点微小的差别：**
+
+~~~
+Function someAction = () -> {
+    System.out.println("Hello World!");
+}
+~~~
+
+**OK, 这样我们的lambda表达式就进化完全了，由于这里块内的代码只有一行，我们还可以省略花括号（如果你的代码是多行的，那么花括号还是必需的）：**
+
+~~~ java
+Function someAction = () -> System.out.println("Hello World!");
+~~~
+
+至此，`someAction`表达的就是一段代码，这个代码接收0个参数，然后打印"Hello World!"，并返回`void`。
+
+由于Java是强类型的语言，所以我们接下来要来看这个lambda表达是的类型是什么？**也就是这个`Function`是什么？**
+
+根据我们一开始的构想，我们希望这段代码能够传递到方法内，然后在方法内执行调用：
+
+~~~ java
+public void sayHello(() -> System.out.println("Hello World!")) {
+    ...
+}
+~~~
+
+那么Java是怎么实现的呢？Java可没有新增一个类型叫`Function`，而是希望lambda表达式能够兼容老版本的代码。
+
+Java中复用了原来的“接口类型”作为lambda表达式的类型，回过头来看我们原来的`HelloService`的`sayHello`方法：
+
+~~~ java
+public void sayHello(Hello hello) {
+    hello.sayHello();
+}
+~~~
+
+然后再看`Hello`接口：
+
+~~~ java
+public interface Hello {
+    void sayHello();
+}
+~~~
+
+显然`Hello`接口中有个待实现的方法：接收0个参数，然后执行一段代码，并返回`void`。
+
+是不是和前面的`someAction`非常搭？someAction就像这个接口的一个实现。那么我们是不是可以像匿名内部类一样通过lambda表达式为一个接口做实现呢？像下面这样：
+
+~~~ java
+Hello hello = () -> System.out.println("Hello World!");
+~~~
+
+然而Java中，lambda表达式的类型确确实实就是这么用的，其最终可以用一个接口类型来绑定：
+
+~~~ java
+public static void main(String[] args) {
+    // 初始化service
+    HelloService helloService = new HelloService();
+    // 初始化我们自定义的实现
+    HelloWorld helloWorld = new HelloWorld();
+    // 用我们自定义的实现去调用service
+    helloService.sayHello(helloWorld);
+
+    System.out.println("========== separate line ==========");
+    // 用接口类型绑定lambda表达式
+    Hello hello = () -> System.out.println("Hello World From Lambda!");
+    // 调用service测试
+    helloService.sayHello(hello);
+}
+~~~
+
+输出结果如下：
+
+~~~
+Hello world!
+========== separate line ==========
+Hello World From Lambda!
+~~~
+
+是不是特别像一个简化版的匿名内部类：
+
+~~~ java
+// lambda写法
+Hello hello = () -> System.out.println("Hello World!");
+// 匿名内部类写法
+Hello hello = new Hello() {
+    @Override
+    public void sayHello() {
+        System.out.println("Hello World!");
+    }
+};
+~~~
+
+至此我们通过一个不带参数、无返回类型方法来理解lambda表达式的语法，希望对于理解lambda表达式有帮助。
+
+接下来我们看看lambda表达式在不同场景的语法、lambda表达式和匿名内部类的区别以及lambda表达式的一些局限。
+
+---
+
+#### 再谈Lambda表达式
+
+之前我们用了一个`Hello`接口的例子来阐述lambda表达式的语法：
+
+~~~ java
+Hello hello = () -> System.out.println("Hello World!");
+~~~
+
+但是仔细看这段代码，是不是觉得有那么些许问题？Java编译器是如何将这段lambda表达式和接口中的`sayHello`抽象方法关联在一起的？
+
+之前的推断描述是：
+
+1. ()：表示接收0个参数，或者表达为方法不带参数。
+2. ->：指明方法块。
+3. System.out.println("Hello World!")：为代码块实际的逻辑，并且编译器能够判断返回类型为void。
+
+由于这三项条件符合`Hello`接口中的`sayHello`方法声明，所以能够这样绑定。
+
+如果`Hello`接口改成这样呢：
+
+~~~ java
+public interface Hello {
+    void sayHello();
+    void sayGoodBye();
+}
+~~~
+
+多出一个`sayGoodBye`的抽象方法，除了方法名称不一样以外，其他声明都是一样的！那这样的接口能够通过lambda表达式来实现吗？
+
+很遗憾，确实不能，因为Java编译器确实无法知道你所对应的lambda表达式是哪个方法的实现。
+
+那么我们再看，把`sayGoodBye`改成带参数的方法呢：
+
+~~~ java
+public interface Hello {
+    void sayHello();
+    void sayGoodBye(String content);
+}
+~~~
+
+真是非常遗憾，这样的接口类，也无法用lambda表达式来实现。
+
+***因为我们知道，一个接口如果要被实现，则它的所有抽象方法都必须被实现，而Java又需要兼容这些老的机制，所以即使新版本中新增了lambda表达式语法，也无法脱离这个老版本的规则。***
+
+***然而我们又知道，lambda表达式受其语法本身限制，又只能针对接口中的某一个方法进行实现，所以对于接口中有两个抽象方法的，都无法使用lambda表达式来实现。***（lambda本身的出现就是为了满足函数式编程的范式，而将接口中所有的抽象方法都实现的规则是来自面向对象编程范式，所以lambda的出现，其本身的目的就不是来实现一个接口的，而实现一个接口则是lambda表达式的手段而已）
+
+所以lambda表达式只能绑定至那些**只有一个**抽象方法的接口类型上，而Java中还对这种接口给了一个特定的注解：`@FunctionalInterface`，顾名思义就是“函数式编程接口”。
+
+那我们修改一下`Hello`接口，将`sayGoodBye`方法提供一个默认实现，这样这个`Hello`接口又是一个能供通过lambda表达式来实现的函数式编程接口了：
+
+~~~ java
+@FunctionalInterface
+public interface Hello {
+    void sayHello();
+    // 提供一个默认实现
+    default void sayGoodBye(String content) {
+        System.out.println("Hello " + content + "!");
+    }
+}
+~~~
+
+**那么写到这里，我们可以看到lambda表达式和匿名内部类的一个最主要的区别：**
+
+- 匿名内部类能够为任意接口提供实现，无论该接口有多少个抽象方法，而lambda表达式不能，只能为只有一个抽象方法的接口提供实现
+
+---
+
+**讲了这么多，我们回到lambda语法，来总结一下lambda中针对不同情况的写法：**
+
+- 无参数的抽象方法： `() -> { code block }`  或者 `() -> code line`
+~~~ java
+public interface NoParameter {
+    void Method();
+}
+~~~
+~~~ java
+NoParameter noParam = () -> System.out.println("no parameter");
+~~~
+
+- 带一个参数的抽象方法： `(x) -> { code block }` 可以简写成 `x -> { code block }` 或者 `(x) -> code line`
+~~~ java
+public interface OneParameter {
+    void Method(Object obj);
+} 
+~~~
+~~~ java
+OneParameter oneParam = o -> System.out.println(o.getClass());
+~~~
+
+
+- 带多个参数的抽象方法： `(x1, ..., xn) -> { code block }` 或者 `(x1, ..., xn) -> code line`
+~~~ java
+public interface MultiParameters {
+    void Method(Object o1, Object o2);
+}
+~~~
+~~~ java
+MultiParameters multiParams = (o1, o2) -> 
+    System.out.println(o1.getClass() + " | " + o2.getClass());
+~~~
+
+- 返回类型由代码块中的返回类型来决定，如果代码块中存在多行，则需要显示使用关键字return。
+~~~ java
+public interface WithReturnValue {
+    Integer MethodSum(Integer... ints);
+}
+~~~
+~~~ java
+WithReturnValue withRetValue = ints -> {
+    int sum = 0;
+    for (int i : ints) {
+        sum += i;
+    }
+    return sum;
+} 
+~~~
+
+---
+
+#### 后话
+
+至此，我觉得Java中lambda表达式的基本介绍都已经完成了，希望本文对于lambda表达式的语法能够讲解清楚了。
+
+当然函数式编程的内容还有很多很多，后面有机会的话还会继续分享。
