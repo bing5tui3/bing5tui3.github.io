@@ -79,6 +79,20 @@ body {
     margin-bottom: 0.5rem;
   }
 
+  img {
+    display: block;
+    max-width: 100%;
+    border: 1px solid $b5t3-lncolor-1;
+  }
+
+  blockquote {
+    padding-block-start: 1em;
+    padding-block-end: 1em;
+    padding-inline-start: 40px;
+    padding-inline-end: 40px;
+    background-color: $b5t3-bqcolor;
+    border-radius: 10px;
+  }
 }
 
 .b5t3-page-content {

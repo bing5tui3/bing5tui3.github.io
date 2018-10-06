@@ -25,12 +25,20 @@ excerpt_separator: <!--more-->
 
 #### 初入Lamdba表达式
 
-以下是我第一次入门lambda表达式的场景，其实就是从最简单的Runnable接口进行了第一次的尝试。
-
 在Web后端开发中，我们可能会经常编写一些功能，而这些功能可能会依赖一下守护线程来维护其健康性。
 比如一个类包含了一个容器，该容器会在程序运行过程中一直累积元素（比如缓存某些数据），然后通过守护线程定期清理以保持其容量保持在可控范围内。
 
-假设我们有个`CacheService`，其缓存最近**10s**所读取的用户信息。
+&nbsp;
+
+以下是我第一次入门lambda表达式的场景，其实就是从最简单的Runnable接口进行了第一次的尝试。
+
+***场景案例：***
+
+我们有个`UserService`，其为我们提供`User`数据，然后我们还有个`CacheSerivce`，其缓存最近**10s**所读取的用户信息。当我们想要获取一个User数据时，调用`CacheService`获取，如果`CacheService`的缓存中有，则返回缓存中的数据，如果没有则调用`UserService`从持久化数据中读取。
+
+**UML图示如下：**
+
+![image01](/assets/posts/java/lambda-in-java/1.png) 
 
 **我们的用户类`User`如下：**
 
@@ -259,7 +267,7 @@ User name is : [user:1]
 那么这里就可以看到通过匿名内部类的方式，这个`Thread`中的`Runnable`构造写了很多的冗余代码：比如声明啊，注解啊等。而这些代码又是重复性的，也就是如果我再有一个守护线程，可能这些声明还是得再写一遍。那么这个时候lambda表达式就来了：
 
 ~~~ java
-public void cleanCache() {
+private void cleanCache() {
     Thread thread = new Thread(
             () -> clean()
     );
@@ -392,7 +400,15 @@ public static void main(String[] args) {
 
 如此，我们可以说勉强实现了向一个方法中传递行为。但实际上又并不是真的传递了行为，而是传递了一个包含行为的实例。
 
-但是我们又希望能够真正的传递行为，像下面的伪代码这样：
+**原理图如下：**
+
+![image02](/assets/posts/java/lambda-in-java/2.png)
+
+***我们希望控制`HelloService中`的`sayHello`方法的执行，那么只能让`HelloService`接收一个接口的实现类实例（这里是`Hello`接口类），然后调用接口方法（这里是`sayHello`），我们通过给`Hello`接口编写不同的实现（如`HelloJava`，`HelloCpp`，`HelloPython`），来控制`HelloService`中的`sayHello`执行。这其实也就是基于Java的多态性，也体现了Java中针对接口编程的实践原则。***
+
+&nbsp;
+
+**然而**，我们又希望能够真正的传递行为，像下面的伪代码这样：
 
 ~~~ java
 public void sayHello(someAction) {
@@ -551,7 +567,7 @@ Hello hello = () -> System.out.println("Hello World!");
 之前的推断描述是：
 
 1. ()：表示接收0个参数，或者表达为方法不带参数。
-2. ->：指明方法块。
+2. ->：指明方法块。 无实际意义，估计是装饰语法？
 3. System.out.println("Hello World!")：为代码块实际的逻辑，并且编译器能够判断返回类型为void。
 
 由于这三项条件符合`Hello`接口中的`sayHello`方法声明，所以能够这样绑定。
@@ -607,7 +623,7 @@ public interface Hello {
 
 **讲了这么多，我们回到lambda语法，来总结一下lambda中针对不同情况的写法：**
 
-- 无参数的抽象方法： `() -> { code block }`  或者 `() -> code line`
+- 无参数的抽象方法： **`() -> { code block }`**  或者 **`() -> code line`**
 ~~~ java
 public interface NoParameter {
     void Method();
@@ -617,7 +633,7 @@ public interface NoParameter {
 NoParameter noParam = () -> System.out.println("no parameter");
 ~~~
 
-- 带一个参数的抽象方法： `(x) -> { code block }` 可以简写成 `x -> { code block }` 或者 `(x) -> code line`
+- 带一个参数的抽象方法： **`(x) -> { code block }`** 可以简写成 **`x -> { code block }`** 或者 **`(x) -> code line`**
 ~~~ java
 public interface OneParameter {
     void Method(Object obj);
@@ -628,7 +644,7 @@ OneParameter oneParam = o -> System.out.println(o.getClass());
 ~~~
 
 
-- 带多个参数的抽象方法： `(x1, ..., xn) -> { code block }` 或者 `(x1, ..., xn) -> code line`
+- 带多个参数的抽象方法： **`(x1, ..., xn) -> { code block }`** 或者 **`(x1, ..., xn) -> code line`**
 ~~~ java
 public interface MultiParameters {
     void Method(Object o1, Object o2);
@@ -659,6 +675,6 @@ WithReturnValue withRetValue = ints -> {
 
 #### 后话
 
-至此，我觉得Java中lambda表达式的基本介绍都已经完成了，希望本文对于lambda表达式的语法能够讲解清楚了。
+至此，我觉得Java中lambda表达式的语法以及语法的理解方法都已经介绍完成了。
 
 当然函数式编程的内容还有很多很多，后面有机会的话还会继续分享。
