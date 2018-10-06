@@ -416,8 +416,6 @@ public void sayHello(someAction) {
 }
 ~~~
 
-lambda表达式就做了这么一件事，将一段表达式通过内联的方式赋值在一个变量上。
-
 我们希望不用再写一个类，而将一段代码绑定在一个变量上（Function as value），就像下面这样（先不管Function是个什么东西）：
 
 ~~~ 
@@ -426,12 +424,12 @@ Function someAction = public void sayHello() {
 }
 ~~~
 
-Java中可以做到吗？ lambda表达式就做了这么一件事，将一段表达式通过内联的方式赋值在一个变量上。
+Java中可以做到吗？ lambda表达式就做了这么一件事，能够将一段表达式通过内联的方式赋值在一个变量上。
 
-那么这段代码中有哪些东西是没用的呢？
+那么如果Java的lambda表达式要能够完成上述代码的逻辑，那么上述代码中一定有哪些东西是没用的。
 
 
-**首先，public肯定是没用的了，因为这样绑定后，这段代码就是一个局部变量了，和类中的概念就没关系了。我们把`public`去掉：**
+**首先，public肯定是没用的了，因为这样绑定后，这段代码就是一个“值”了，其被`someAction`变量引用，和类中的方法声明就没关系了。我们把`public`去掉：**
 
 ~~~ 
 Function someAction = void sayHello() {
@@ -439,7 +437,7 @@ Function someAction = void sayHello() {
 }
 ~~~
 
-**接下来，方法的名称`sayHello`还有用吗？肯定也没用了，因为这段代码的名称就由这个变量`someAction`来标明了，去掉`sayHello`：**
+**接下来，方法的名称`sayHello`还有用吗？肯定也没用了，因为这段代码的名称就由变量`someAction`来标明了，即使将来对这段代码进行引用，也是通过`someAction`来引用，所以去掉`sayHello`：**
 
 ~~~
 Function someAction = void () {
@@ -447,7 +445,7 @@ Function someAction = void () {
 }
 ~~~
 
-**我们再看这个返回类型`void`是否还有必要？ Java编译器已经足够聪明，根据代码来判断返回类型是什么，所以这里返回类型也不需要了，去掉：**
+**我们再看这个返回类型`void`是否还有必要？ Java编译器已经足够聪明，能够根据代码来判断返回类型是什么，所以这里返回类型也不需要了，去掉`void`：**
 
 ~~~
 Function someAction = () {
@@ -455,7 +453,7 @@ Function someAction = () {
 }
 ~~~
 
-**至此我们的lambda表达式进化的就差不多了，只不过还剩下一点微小的差别：**
+**至此我们的lambda表达式简化的就差不多了，只不过还剩下一点微小的差别，在Java中，正确的lambda表达式是这样的：**
 
 ~~~
 Function someAction = () -> {
@@ -463,15 +461,15 @@ Function someAction = () -> {
 }
 ~~~
 
-**OK, 这样我们的lambda表达式就进化完全了，由于这里块内的代码只有一行，我们还可以省略花括号（如果你的代码是多行的，那么花括号还是必需的）：**
+**由于这里块内的代码只有一行，我们还可以省略花括号（如果你的代码是多行的，那么花括号还是必需的）：**
 
 ~~~ java
 Function someAction = () -> System.out.println("Hello World!");
 ~~~
 
-至此，`someAction`表达的就是一段代码，这个代码接收0个参数，然后打印"Hello World!"，并返回`void`。
+至此，`someAction`表达的就是一段代码，这个代码接收0个参数，然后打印"Hello World!"，并返回`void`（也就是什么都不返回）。
 
-由于Java是强类型的语言，所以我们接下来要来看这个lambda表达是的类型是什么？**也就是这个`Function`是什么？**
+由于Java是强类型的语言，所以我们接下来要来看这个lambda表达式的类型是什么？**也就是这个`Function`是个什么？**
 
 根据我们一开始的构想，我们希望这段代码能够传递到方法内，然后在方法内执行调用：
 
@@ -481,7 +479,7 @@ public void sayHello(() -> System.out.println("Hello World!")) {
 }
 ~~~
 
-那么Java是怎么实现的呢？Java可没有新增一个类型叫`Function`，而是希望lambda表达式能够兼容老版本的代码。
+那么Java是怎么实现的呢？Java可没有新增一个类型叫`Function`的原生类，而是希望lambda表达式能够兼容老版本的代码。
 
 Java中复用了原来的“接口类型”作为lambda表达式的类型，回过头来看我们原来的`HelloService`的`sayHello`方法：
 
@@ -507,7 +505,7 @@ public interface Hello {
 Hello hello = () -> System.out.println("Hello World!");
 ~~~
 
-然而Java中，lambda表达式的类型确确实实就是这么用的，其最终可以用一个接口类型来绑定：
+事实上在Java中，lambda表达式的引用确确实实就是这样的，其最终可以用一个接口类型来绑定：
 
 ~~~ java
 public static void main(String[] args) {
