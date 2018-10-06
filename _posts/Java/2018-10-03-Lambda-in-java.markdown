@@ -404,7 +404,7 @@ public static void main(String[] args) {
 
 ![image02](/assets/posts/java/lambda-in-java/2.png)
 
-***我们希望控制`HelloService中`的`sayHello`方法的执行，那么只能让`HelloService`接收一个接口的实现类实例（这里是`Hello`接口类），然后调用接口方法（这里是`sayHello`），我们通过给`Hello`接口编写不同的实现（如`HelloJava`，`HelloCpp`，`HelloPython`），来控制`HelloService`中的`sayHello`执行。这其实也就是基于Java的多态性，也体现了Java中针对接口编程的实践原则。***
+***我们希望控制`HelloService中`的`sayHello`方法的执行，那么只能让`HelloService`接收一个接口的实现类实例（这里是`Hello`接口类），然后调用接口方法（这里是`sayHello`），我们通过给`Hello`接口编写不同的实现（如`HelloWorld`，`HelloEarth`，`HelloUniverse`），来控制`HelloService`中的`sayHello`执行。这其实也就是基于Java的多态性，也体现了Java中针对接口编程的实践原则。***
 
 &nbsp;
 
