@@ -308,3 +308,15 @@ code {
     }
   }
 }
+
+.b5t3-blog-toc {
+  margin-top: 30px;
+  h1,h2,h3,h4,h5,h6 {
+    color: $b5t3-toc-color;
+    font-family: $b5t3-font-3;
+  }
+  ul {
+    list-style: none;
+  }
+  border-bottom: 1px solid $b5t3-lncolor-1;
+}

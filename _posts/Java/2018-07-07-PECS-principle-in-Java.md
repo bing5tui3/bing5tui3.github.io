@@ -8,7 +8,7 @@ categories: [java]
 excerpt_separator: <!--more-->
 ---
 
-工作上碰到一个需要异步处理任务的功能，所以想基于队列来实现，由守护线程来从队列中消费消息。 
+工作上碰到一个需要异步处理任务的功能，所以想基于队列来实现，由守护线程来从队列中消费消息。
 由于队列容器内的对象需要有一些公共机制，以使异步处理模块能够不关心具体的实现，这就需要使用到泛型队列了。
 本文记录一下泛型队列的PECS原则的实践。
 
@@ -20,7 +20,7 @@ Producer Extends Consumer Super
 
 #### 一个基于基类的容器例子
 
-`? extends BaseClass` 规定了一个上界，表示一个容器类能够装载的对象的类可以是 `BaseClass` 或者 `BaseClass` 的子类。 
+`? extends BaseClass` 规定了一个上界，表示一个容器类能够装载的对象的类可以是 `BaseClass` 或者 `BaseClass` 的子类。
 
 我们先创建一个基类 `BaseClass` 和一个子类 `SubClass`，然后试着向容器添加一些内容（*这里用了ArrayList*）：
 
@@ -35,7 +35,7 @@ class SubClass extend BaseClass {}
 public class Main {
 
     public static void main(String[] args) {
-		
+
         // 一个基于BaseClass的ArrayList的对象添加   --  no problem
         BaseClass base = new BaseClass();
         List<BaseClass> listNormal = new ArrayList<>();
@@ -69,7 +69,7 @@ public class Main {
 ~~~ java
 // BaseTaskModel 抽象类，不能直接被实体化，每个任务要求实现自己的TaskModel
 public abstarct class BaseTaskModel {
-    
+
     private String taskName;
 
     public String getTaskName() { return this.taskName; }
@@ -135,10 +135,10 @@ public interface TaskHandler {
 ~~~ java
 public class ATaskHandler implements TaskHandler {
 
-    public void handleTask(BaseTaskModel taskModel) { 
+    public void handleTask(BaseTaskModel taskModel) {
         // 强制转换成A的任务实例，如果taskModel不是ATaskModel的实例，则会抛出CCE
         ATaskModel a = (ATaskModel) taskModel;
-        // do something 
+        // do something
     }
 
     public void handleException(BaseTaskModel taskModel) {
@@ -152,10 +152,10 @@ public class ATaskHandler implements TaskHandler {
 ~~~ java
 public class BTaskHandler implements TaskHandler {
 
-    public void handleTask(BaseTaskModel taskModel) { 
+    public void handleTask(BaseTaskModel taskModel) {
         // 强制转换成B的任务实例，同理会抛出CCE
         BTaskModel b = (BTaskModel) taskModel;
-        // do something 
+        // do something
     }
 
     public void handleException(BaseTaskModel taskModel) {
@@ -251,7 +251,7 @@ public void init() {
     // 初始化任务队列
     taskQueueMap.put("taskA", new LinkedBlockingQueue<ATaskModel>());  // error
     taskQueueMap.put("taskB", new LinkedBlockingQueue<BTaskModel>());  // error
-    
+
     ...
 }
 ~~~
@@ -264,24 +264,24 @@ public void init() {
 
 那么我们要实现具体队列由具体类型所初始化该怎么办？
 
-Java设计者给了我们一个解决方案： 
+Java设计者给了我们一个解决方案：
 * 通配符类型 `? extends` *BaseClass*  
 * 通配符类型 `? super` *BaseClass*
 
 #### 关键字<? extends *BaseClass*>
 
-`? extends` *BaseClass* 规定了类型参数的上界。 
+`? extends` *BaseClass* 规定了类型参数的上界。
 
 假设有个人类的类 `class Human`，有个男人的类 `class Man extends Human`，有个女人的类 `class Woman extends Human`
 ~~~ java
 public class Human {}
 
-class Man extends Human {} 
+class Man extends Human {}
 
 class Woman extends Human {}
 ~~~
 
-虽然我们有: 
+虽然我们有:
 
 * `Man` --- subclass ---> `Human`
 * `Woman` --- subclass ---> `Human`
@@ -391,7 +391,7 @@ public class AsynchronousTaskProcesser {
         if (taskModel != null) {
             switch (taskModel.getTaskName()) {
                 case "taskA":
-                
+
                     LinkedBlockingQueue<ATaskModel> queue = (LinkedBlockingQueue<ATaskModel>) taskQueueMap.get(taskModel.getTaskName());
                     return queue.offer((ATaskModel) taskModel);
 
