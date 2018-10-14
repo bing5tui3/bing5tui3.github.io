@@ -70,7 +70,7 @@ body {
 
   h1,h2,h3,h4,h5,h6 {
     color: $b5t3-hcolor-1;
-    font-family: $b5t3-font-3;
+    // font-family: $b5t3-font-3;
     font-weight: bold;
     margin: 1em 0;
   }
@@ -281,7 +281,7 @@ code {
   margin: 0;
   padding: 0;
   list-style: none;
-  
+
   li {
     display: inline-block;
     margin: 0 .3em .3em 0;
