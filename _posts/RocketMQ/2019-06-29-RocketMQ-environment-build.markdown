@@ -232,9 +232,9 @@ OK，到此我们单点的**broker**和**nameserver**的启动前配置都准备
 
 #### RocketMQ的启动
 
-完成了配置之后，我们可以进行RocketMQ的启动了。
+完成了配置之后，我们可以进行**RocketMQ**的启动了。
 
-RocketMQ的启动过程是要先启动NameServer，再启动Broker。
+**RocketMQ**的启动过程是要先启动**NameServer**，再启动**Broker**。
 
 ##### 启动NameServer
 
@@ -243,7 +243,7 @@ cd /opt/apache-rocketmq/rocketmq-4.5.1/bin
 nohup sh mqnamesrv &
 ```
 
-可以通过`jps`命令查看NameServer是否启动成功：
+可以通过`jps`命令查看**NameServer**是否启动成功：
 ```bash
 jps | grep Namesrv
 ```
@@ -261,7 +261,7 @@ cd /opt/apache-rocketmq/rocketmq-4.5.1/bin
 nohup sh mqbroker -c /opt/apache-rocketmq/rocketmq-4.5.1/conf/1m-noslave/broker.properties  > /dev/null 2>&1 &
 ```
 
-通过`jps`命令查看Broker是否启动成功：
+通过`jps`命令查看**Broker**是否启动成功：
 
 ```bash
 jps | grep Broker
