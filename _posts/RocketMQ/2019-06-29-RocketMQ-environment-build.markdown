@@ -16,7 +16,7 @@ excerpt_separator: <!--more-->
 
 <!--more-->
 
-#### RocketMQ构建
+#### *RocketMQ*构建
 
 我选择从**`Github`**克隆源码进行构建，因为之后学习也需要对着源码进行。 
 
@@ -64,7 +64,7 @@ ls -la
 
 到这里为止，**`RocketMQ`**的构建就完成了，当然你也可以直接下载构建好的压缩包。
 
-#### RocketMQ部署
+#### *RocketMQ*部署
 
 接下来我们将部署单一节点的**RocketMQ**，选择一台Linux机器，可以是虚拟机也可以是物理机。
 
@@ -112,7 +112,7 @@ cd /opt/apache-rocketmq/rocketmq-4.5.1/
 + -- lib/
 ```
 
-##### 编写**Broker**配置文件
+##### 编写*Broker*配置文件
 
 接下来，我们要编写**broker**的一个配置文件，由于我这边使用单点的方式部署，所以将配置文件的目录命名为*1m-noslave*。
 
@@ -230,13 +230,13 @@ sed -i 's#${user.home}#/opt/apache-rocketmq/rocketmq-4.5.1#g' *.xml
 
 OK，到此我们单点的**broker**和**nameserver**的启动前配置都准备好了。
 
-#### RocketMQ的启动
+#### *RocketMQ*的启动
 
 完成了配置之后，我们可以进行**RocketMQ**的启动了。
 
 **RocketMQ**的启动过程是要先启动**NameServer**，再启动**Broker**。
 
-##### 启动NameServer
+##### 启动*NameServer*
 
 ```bash
 cd /opt/apache-rocketmq/rocketmq-4.5.1/bin
@@ -253,7 +253,7 @@ jps | grep Namesrv
 xxxxx NamesrvStartup
 ```
 
-##### 启动Broker
+##### 启动*Broker*
 
 ```bash
 cd /opt/apache-rocketmq/rocketmq-4.5.1/bin
