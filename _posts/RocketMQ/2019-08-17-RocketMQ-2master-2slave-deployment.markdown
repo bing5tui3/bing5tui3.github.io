@@ -8,15 +8,15 @@ categories: [rocketMQ]
 excerpt_separator: <!--more-->
 ---
 
-本文介绍如何部署双主双从模式的RocketMQ集群
+本文介绍如何部署双主双从模式的**RocketMQ**集群
 
 <!--more-->
 
 #### 物理环境准备
 
-首先需要4台机器，我这边虚拟了选用了4台Linux作为部署RocketMQ的机器。
+首先需要4台机器，我这边虚拟了选用了4台**Linux**作为部署**RocketMQ**的机器。
 
-操作系统我选择了ArchLinux，因为其内核较小，运行时占用资源较少。
+操作系统我选择了**ArchLinux**，因为其内核较小，运行时占用资源较少。
 
 安装过程可参考[ArchLinux installation]({% post_url 2019-08-11-Arch-linux-installation %})。
 
@@ -51,9 +51,11 @@ excerpt_separator: <!--more-->
 
 #### RocketMQ安装
 
-RocketMQ的安装可以参考之前的 [[单节点部署]({% post_url 2019-06-29-RocketMQ-one-master-no-slave-deployment %})]
+**RocketMQ**的安装可以参考之前的 [[单节点部署]({% post_url 2019-06-29-RocketMQ-one-master-no-slave-deployment %})]
 
-不要忘了日志配置的部分！
+注意：这次我将RocketMQ安装在了`/opt/rocketmq`目录下而非之前文章里的`/opt/apache-rocketmq`目录。
+
+还有：不要忘了日志配置的部分！
 
 #### 双主双从节点设置
 
@@ -177,15 +179,10 @@ flushDiskType=ASYNC_FLUSH
 
 ```bash
 ...
-
 brokerId=1
-
 ...
-
 brokerRole=SLAVE
-
 ...
-
 ```
 
 这里：
@@ -198,9 +195,7 @@ brokerRole=SLAVE
 
 ```bash
 ...
-
 brokerName=broker-2
-
 ...
 ```
 
@@ -213,13 +208,101 @@ brokerName=broker-2
 
 ```bash
 ...
-
 brokerId=1
-
 ...
-
 brokerRole=SLAVE
-
 ...
+```
 
+#### RocketMQ集群启动
+
+##### NameServer进程启动
+
+首先我们4台服务器都启动**nameserver**进程：
+
+```bash
+cd /opt/rocketmq/rocketmq-4.5.1/bin
+nohup sh mqnamesrv &
+```
+
+##### Broker进程启动
+
+4台服务器都进入如下目录：
+
+```bash
+cd /opt/rocketmq/rocketmq-4.5.1/bin
+```
+
+分节点进行**broker**的启动（注意配置文件的对应关系）：
+
+1. [rocketmq-master1]节点启动
+```bash
+nohup sh mqbroker -c /opt/rocketmq/rocketmq-4.5.1/conf/2m-2s-sync/broker-a.properties  > /dev/null 2>&1 &
+```
+
+2. [rocketmq-master2]节点启动
+```bash
+nohup sh mqbroker -c /opt/rocketmq/rocketmq-4.5.1/conf/2m-2s-sync/broker-b.properties  > /dev/null 2>&1 &
+```
+
+3. [rocketmq-master1-slave]节点启动
+```bash
+nohup sh mqbroker -c /opt/rocketmq/rocketmq-4.5.1/conf/2m-2s-sync/broker-a-s.properties  > /dev/null 2>&1 &
+```
+
+4. [rocketmq-master2-slave]节点启动
+```bash
+nohup sh mqbroker -c /opt/rocketmq/rocketmq-4.5.1/conf/2m-2s-sync/broker-b-s.properties  > /dev/null 2>&1 &
+```
+
+完成启动后可以通过`jps`检查进程启动状况。
+
+
+#### systemd服务编写
+
+为了后续管理方便，此小节给出**`systemd`**服务的编写例子。
+
+**broker**的`systemd`服务文件`/etc/systemd/system/broker.service`：
+
+```bash
+[Unit]
+Description=Broker Service
+#Requires=namesrv.service
+[Service]
+Type=simple
+Environment="JAVA_HOME=/opt/java/jdk1.8.0_221/"
+ExecStart=sh /opt/rocketmq/rocketmq-4.5.1/bin/mqbroker -c /opt/rocketmq/rocketmq-4.5.1/conf/2m-2s-sync/[broker-xxx.properties]  > /dev/null 2>&1 &
+ExecStop=sh /opt/rocketmq/rocketmq-4.5.1/bin/mqshutdown broker
+[Install]
+WantedBy=multi-user.target
+```
+
+注意其中的`broker-xxx.properties`替换为每台服务器自己对应的配置文件。
+
+
+**nameserver**的`systemd`服务文件`/etc/systemd/system/namesrv.service`：
+
+```bash
+[Unit]
+Description=Nameserver Service
+[Service]
+Type=simple
+Environment="JAVA_HOME=/opt/java/jdk1.8.0_221/"
+ExecStart=sh /opt/rocketmq/rocketmq-4.5.1/bin/mqnamesrv &
+ExecStop=sh /opt/rocketmq/rocketmq-4.5.1/bin/mqshutdown namesrv
+[Install]
+WantedBy=multi-user.target
+```
+
+加载配置，设置开机自动启动，并启动服务：
+
+```bash
+# 重新加载配置
+systemctl daemon-relaod
+# 开启开机自动启动
+systemctl enable namesrv
+systemctl enable broker
+# 启动nameserver和broker的服务
+systemctl start namesrv
+systemctl start broker
 ```

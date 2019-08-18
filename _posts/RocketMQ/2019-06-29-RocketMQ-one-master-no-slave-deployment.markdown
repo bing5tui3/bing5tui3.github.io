@@ -258,7 +258,7 @@ xxxxx NamesrvStartup
 ```bash
 cd /opt/apache-rocketmq/rocketmq-4.5.1/bin
 # 通过-C 指定配置文件的路径，这个配置就是之前写的broker配置
-nohup sh mqbroker -C /opt/apache-rocketmq/rocketmq-4.5.1/conf/1m-noslave/broker.properties  > /dev/null 2>&1 &
+nohup sh mqbroker -c /opt/apache-rocketmq/rocketmq-4.5.1/conf/1m-noslave/broker.properties  > /dev/null 2>&1 &
 ```
 
 通过`jps`命令查看**Broker**是否启动成功：
