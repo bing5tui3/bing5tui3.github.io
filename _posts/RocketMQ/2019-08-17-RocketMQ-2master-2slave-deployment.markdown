@@ -306,3 +306,5 @@ systemctl enable broker
 systemctl start namesrv
 systemctl start broker
 ```
+
+到此我我们双主双从高可用模式的**RocketMQ**就部署完成了。
