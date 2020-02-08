@@ -65,7 +65,8 @@ public class Main {
 
 下面我们写一个简单的异步处理类，它维护一个简单的任务列表和一个与列表对应的任务队列，每个任务由一个线程守护，从队列中读取消息实例，然后交给任务处理其处理。
 
-###### 首先是一个任务类的基类，需要有一个实例域是任务名，后续用于读取后根据任务名分配对应的任务处理器：
+**首先是一个任务类的基类，需要有一个实例域是任务名，后续用于读取后根据任务名分配对应的任务处理器：**
+
 ~~~ java
 // BaseTaskModel 抽象类，不能直接被实体化，每个任务要求实现自己的TaskModel
 public abstarct class BaseTaskModel {
@@ -79,7 +80,7 @@ public abstarct class BaseTaskModel {
 }
 ~~~
 
-###### 任务A的任务类 `ATaskModel.java`：
+**任务A的任务类 `ATaskModel.java`：**
 ~~~ java
 // ATaskModel
 public class ATaskModel extends BaseTaskModel {
@@ -93,13 +94,13 @@ public class ATaskModel extends BaseTaskModel {
 }
 ~~~
 
-###### 任务A的任务类中携带的消息类 `MessageA.java`：
+**任务A的任务类中携带的消息类 `MessageA.java`：**
 ~~~ java
 // MessageA
 public class MessageA {}
 ~~~
 
-###### 任务B的任务类 `BTaskModel.java` ：
+**任务B的任务类 `BTaskModel.java` ：**
 ~~~ java
 // BTaskModel
 public class BTaskModel extends BaseTaskModel {
@@ -113,13 +114,13 @@ public class BTaskModel extends BaseTaskModel {
 }
 ~~~
 
-###### 任务B的任务类中携带的消息类 `MessageB.java`：
+**任务B的任务类中携带的消息类 `MessageB.java`：**
 ~~~ java
 // MessageB
 public class MessageB {}
 ~~~
 
-###### 任务处理器接口 `TaskHandler.java`
+**任务处理器接口 `TaskHandler.java`**
 ~~~ java
 public interface TaskHandler {
 
@@ -131,7 +132,7 @@ public interface TaskHandler {
 }
 ~~~
 
-###### 任务A的任务处理器类 `ATaskHandler.java`：
+**任务A的任务处理器类 `ATaskHandler.java`：**
 ~~~ java
 public class ATaskHandler implements TaskHandler {
 
@@ -148,7 +149,7 @@ public class ATaskHandler implements TaskHandler {
 }
 ~~~
 
-###### 任务B的任务处理器类 `BTaskHandler.java`：
+**任务B的任务处理器类 `BTaskHandler.java`：**
 ~~~ java
 public class BTaskHandler implements TaskHandler {
 
@@ -165,7 +166,7 @@ public class BTaskHandler implements TaskHandler {
 }
 ~~~
 
-###### 异步任务处理类 `AsynchronousTaskProcesser.java`
+**异步任务处理类 `AsynchronousTaskProcesser.java`**
 ~~~ java
 public class AsynchronousTaskProcesser {
 

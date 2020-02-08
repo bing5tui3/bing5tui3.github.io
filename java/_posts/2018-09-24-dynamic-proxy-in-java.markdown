@@ -102,7 +102,7 @@ public class DeliveryCase {
         // 由星法克直接派送
         starFxxcks.deliver();
 
-        System.out.println("-------------------- separate line --------------------");
+        System.out.println("`-------------------- separate line --------------------`");
 
         // 将星法克店铺注册到饿了啊平台
         ErrrLeAa startFxxcks_registered_on_ErrrLeAa = new ErrrLeAa(starFxxcks);
@@ -123,11 +123,12 @@ public class DeliveryCase {
 ~~~
 coffee starts delivering...
 coffee delivered
--------------------- separate line --------------------
+`-------------------- separate line --------------------`
 ErrrLeAa charges 3 RMB
 coffee starts delivering...
 coffee delivered
 ~~~
+
 可以看到饿了啊平台收取了3人民币后进行了派送。
 
 假设又有一家咖啡店法金咖啡想要加入饿了啊平台，但是法金咖啡还有一个功能是希望饿了啊帮忙打广告，怎么办呢？

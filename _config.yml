@@ -17,11 +17,7 @@ title: bing5tui3 Keeps Learning
 email: rui.oaoa@gmail.com
 author: bing5tui3
 description: >- # this means to ignore newlines until "baseurl:"
-  <em>Career Line:</em> <br>
-  Bank of Communication <br>
-  VipShop <br>
-  Alibaba Group<br>
-  WeBank
+
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: bing5tui3
@@ -33,11 +29,15 @@ highlighter: rouge
 # theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-paginate
+
+paginate: 5
+paginate_path: /page:num/
 
 sass:
   sass_dir: css
 
-permalink: /:categories/:year/:month/:day/:title:output_ext
+# permalink: /:categories/:year/:month/:day/:title:output_ext
 
 
 # Exclude from processing.

@@ -3,6 +3,7 @@
 
 @import 'bootstrap/bootstrap';
 @import 'custom/markdown';
+@import 'custom/pagination';
 
 html {
   height: 100%;
@@ -128,6 +129,19 @@ body {
       color: $white;
     }
   }
+  img {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+.b5t3-blog-image {
+  img {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
 }
 
 .b5t3-post-excerpt {
@@ -145,7 +159,7 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 .b5t3-sidebar,
@@ -218,7 +232,7 @@ body {
     display: none;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 1000px) {
   .b5t3-footer {
     display: block;
   }
@@ -238,7 +252,6 @@ code {
   font-family: $b5t3-font-2;
   color: $b5t3-code-color;
   font-weight: bold;
-  font-size: 110%;
 }
 
 .fab {
