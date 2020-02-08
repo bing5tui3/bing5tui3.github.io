@@ -5,6 +5,7 @@ date:   2019-08-11
 author: "bing5tui3"
 tags: [linux]
 categories: [linux]
+image: /assets/posts/linux/arch-linux-installation/archlinux_logo.jpg
 excerpt_separator: <!--more-->
 ---
 
