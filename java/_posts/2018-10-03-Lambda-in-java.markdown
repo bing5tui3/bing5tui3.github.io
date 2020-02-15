@@ -5,7 +5,7 @@ date:   2018-07-15
 author: "bing5tui3"
 tags: [java]
 categories: [java]
-image: /assets/posts/java/lambda-in-java/java_lambda.jpg
+image: /assets/posts/java/lambda-in-java/java_lambda_logo.jpg
 excerpt_separator: <!--more-->
 ---
 
