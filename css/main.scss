@@ -104,6 +104,10 @@ body {
   margin-bottom: 2em;
   color: $primary;
   font-family: $b5t3-font-3;
+  h1 {
+    font-size: 50px;
+    font-weight: 800;
+  }
 }
 
 .b5t3-post-item {
@@ -251,7 +255,6 @@ body {
 code {
   font-family: $b5t3-font-2;
   color: $b5t3-code-color;
-  font-weight: bold;
 }
 
 .fab {
@@ -263,10 +266,10 @@ code {
   color: $white;
   font-family: $b5t3-font-3;
   span {
-    font-size: 0.6em;
+    font-size: 14px;
     background-color: $b5t3-bgcolor-2;
-    border-radius: 0.2em;
-    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    padding: 3px 5px;
     a {
       color: $white;
     }
