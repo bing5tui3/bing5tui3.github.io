@@ -1,11 +1,12 @@
-$primary: #404040;
+$primary: #4d4d4d;
 $gray-900: #3a3a3a;
+$font-primary: #4d4d4d;
 
 
 // bing5tui3 variables
 // background-color
 $b5t3-bgcolor-1: $primary;
-$b5t3-bgcolor-2: #666666;
+$b5t3-bgcolor-2: #4CAF50;
 // font-color
 $b5t3-fcolor-1: #ffffff;
 $b5t3-fcolor-2: #4775d1;
@@ -24,6 +25,8 @@ $b5t3-toc-color: #404040;
 // code color
 $b5t3-code-color: #2e5cb8;
 
+$b5t3-font-color: $font-primary;
+
 $b5t3-font-1: 'microsoft yahei';
 $b5t3-font-2: 'Oxygen Mono', 'microsoft yahei';
-$b5t3-font-3: 'Bangers', 'microsoft yahei', cursive;
+$b5t3-font-3: 'microsoft yahei', cursive;

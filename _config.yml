@@ -17,7 +17,6 @@ title: bing5tui3 Keeps Learning
 email: rui.oaoa@gmail.com
 author: bing5tui3
 description: >- # this means to ignore newlines until "baseurl:"
-
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: bing5tui3
